@@ -1,0 +1,12 @@
+{
+  "name": "constructionPlanMgmt",
+  "version": "1.0.0",
+  "description": "construction plan managment app",
+  "main": "server.js",
+  "repository": "git@github.com:gracemiller23/constructionPlanMgmt.git",
+  "author": "Grace Miller",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
