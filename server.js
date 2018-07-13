@@ -12,6 +12,9 @@ const PORT = process.env.PORT || 3001;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//serve files out of the client/build folder of the react app
+app.use(express.static("client/build"));
+
 //routes
 
 app.get("/", (req,res)=> {
@@ -21,11 +24,17 @@ app.get("/", (req,res)=> {
 app.get("/api/test", (req,res)=> {
     res.json(true);
 });
-
+ 
+const formData = [];
 app.post("/api/test", (req, res)=> {
     console.log(req.body);
-    req.body.received = true;
-    res.json(req.body);
+    formData.push(req.body);
+    res.json(formData);
+});
+
+//if no other route is matched
+app.use(function(req,res){
+    res.sendFile(path.join(__dirname, "client/build/index.html"));
 })
 
 
@@ -34,9 +43,6 @@ app.post("/api/test", (req, res)=> {
 //connect and target a mongo db - the MONGODB_URI env variable is coming from Heroku where it's set under config
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/my-blog");
   
-  
-//this allows us to serve files out of the client/build folder of the react app
-app.use(express.static("client/build"));
 
 
 //starting up the server
