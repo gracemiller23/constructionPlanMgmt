@@ -8,12 +8,24 @@ const mongoose = require("mongoose");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+  
+//connect and target a mongo db - the MONGODB_URI env variable is coming from Heroku where it's set under config
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/plan-room");
+
+//import schemas
+//how to import multiple models
+//const db = require("./models");
+const SubcontractorProfile = require("./models/subcontractor");
+
 //middleware to parse json objects
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //serve files out of the client/build folder of the react app
 app.use(express.static("client/build"));
+
+
+ 
 
 //routes
 
@@ -25,11 +37,11 @@ app.get("/api/test", (req,res)=> {
     res.json(true);
 });
  
-const formData = [];
 app.post("/api/test", (req, res)=> {
     console.log(req.body);
-    formData.push(req.body);
-    res.json(formData);
+    SubcontractorProfile.create(req.body).then(dbSubProfile => {
+        res.json(dbSubProfile);
+    })
 });
 
 //if no other route is matched
@@ -39,10 +51,7 @@ app.use(function(req,res){
 
 
 //adding the mongoose schemas here
-  
-//connect and target a mongo db - the MONGODB_URI env variable is coming from Heroku where it's set under config
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/my-blog");
-  
+ 
 
 
 //starting up the server
