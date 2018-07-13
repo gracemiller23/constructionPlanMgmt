@@ -12,6 +12,22 @@ const PORT = process.env.PORT || 3001;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//routes
+
+app.get("/", (req,res)=> {
+    res.send("hi");
+});
+
+app.get("/api/test", (req,res)=> {
+    res.json(true);
+});
+
+app.post("/api/test", (req, res)=> {
+    console.log(req.body);
+    req.body.received = true;
+    res.json(req.body);
+})
+
 
 //adding the mongoose schemas here
   
