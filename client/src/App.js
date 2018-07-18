@@ -1,57 +1,50 @@
 import React, { Component } from 'react';
-import axios from "axios";
-import './App.css';
+
+import {Router, Route} from "react-router-dom";
+
+import SubDashboard from './pages/SubDashboard';
+import Profileform from './pages/Profileform';
+import Callback from './pages/Callback';
+
+import Auth from './Auth/Auth';
+import history from './history';
+
+const auth = new Auth();
+
+const handleAuthentication = (nextState, replace) => {
+  if (/access_token|id_token|error/.test(nextState.location.hash)) {
+    auth.handleAuthentication();
+  }
+}
 
 class App extends Component {
-  state = {
-    title:"",
-    body:""
-  }
-  getClickRequest(){
-    axios.get("/api/test").then(res=>{
-      console.log("get test");
-    });
-  }
 
-  getPostRequest() {
-    axios.post("/api/test", {test: true}).then(res=>{
-      console.log("post test");
-    });
-  }
-
-  saveForm= event =>{
-    event.preventDefault();
-    console.log(this.state.title);
-    console.log(this.state.body);
-
-
-  }
-
-  handleInputChange = event => {
-    const value = event.target.value;
-    const title = event.target.name;
-    this.setState({[title]: value})
-  }
-
-  postForm = event => {
-    event.preventDefault();
-    const {title, body} = this.state;
-    axios.post("/api/test", {title,body}).then(res =>{
-      console.log(res);
-      this.setState({title: "", body:""});
-    });
-  }
   render() {
-    
-    return (
-      <div >
+    const {isAuthenticated} = auth;
 
-        <form>
-          <input name="title" value={this.state.title} onChange={this.handleInputChange}/>
-          <textarea name= "body" value={this.state.body} onChange={this.handleInputChange}></textarea>
-          <button onClick={this.postForm}>submit</button>
-          </form>
+    return (
+      <Router history={history}>
+      <div >
+        <div>
+          {
+            isAuthenticated() ? 
+            (<div>Logged In <button onClick={() => auth.logout()}>Log Out</button></div>) 
+            : 
+            (<div>Logged Out <button onClick={() => auth.login()}>Log In</button></div>)
+          }
+          </div>
+
+        <Route exact path="/" render={(props)=><SubDashboard auth={auth} {...props}/>}/>
+        <Route exact path="/editsubprofile" render={(props)=><Profileform auth={auth} {...props}/>}/>
+
+ <Route path="/callback" render={(props) => {
+          handleAuthentication(props);
+          return <Callback {...props} /> 
+        }}/>
+
+        
       </div>
+      </Router>
     );
   }
 }

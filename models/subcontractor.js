@@ -5,6 +5,8 @@ const Schema = mongoose.Schema;
 const SubcontractorProfileSchema = new Schema({
     title: String,
     body: String
+},{
+    timestamps:true
 });
 
 const SubcontractorProfile = mongoose.model("SubcontractorProfile", SubcontractorProfileSchema);
