@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
-import {Router, Route} from "react-router-dom";
+import {Router, Route, Redirect} from "react-router-dom";
 
 import SubDashboard from './pages/SubDashboard';
 import Profileform from './pages/Profileform';
 import Callback from './pages/Callback';
+import NeedAdminApproval from './pages/NeedAdminApproval';
+import Landing from './pages/Landing';
 
 import Auth from './Auth/Auth';
 import history from './history';
@@ -34,8 +36,19 @@ class App extends Component {
           }
           </div>
 
-        <Route exact path="/" render={(props)=><SubDashboard auth={auth} {...props}/>}/>
-        <Route exact path="/editsubprofile" render={(props)=><Profileform auth={auth} {...props}/>}/>
+        <Route exact path="/" render={(props)=><Landing auth={auth} {...props}/>}/>
+        <Route exact path="/awaitapproval" render={(props)=><NeedAdminApproval auth={auth} {...props}/>}/>
+        
+        <Route exact path="/buildprofile" render={(props)=><Profileform auth={auth} {...props}/>}/>
+        <Route exact path="/editsubprofile" render={(props)=>{
+        const isAllowed = auth.isAuthenticated() && auth.userHasScopes(['write:projects']);
+        return  isAllowed ?
+                (<Profileform auth={auth} {...props}/>)
+                :(
+                  <Redirect to="/"/>
+                )
+              }
+      }/>
 
  <Route path="/callback" render={(props) => {
           handleAuthentication(props);

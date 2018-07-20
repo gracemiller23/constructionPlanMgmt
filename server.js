@@ -3,7 +3,16 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const mongoose = require("mongoose");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
+dotenv.config();
+
+if(!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE){
+    throw "Make sure you have AUTH0_DOMAIN and AUTH0_AUDIENCE configured."
+}
+
+//jwt middleware
 const jwt = require("express-jwt");
 const jwtAuthz = require("express-jwt-authz");
 const jwks = require("jwks-rsa");
@@ -21,6 +30,12 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/plan-room");
 //const db = require("./models");
 const SubcontractorProfile = require("./models/subcontractor");
 
+const corsOptions ={
+    origin: 'http://localhost:3000'
+};
+
+app.use(cors(corsOptions));
+
 //middleware to parse json objects
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -28,22 +43,24 @@ app.use(bodyParser.json());
 //serve files out of the client/build folder of the react app
 app.use(express.static("client/build"));
 
-
-var jwtCheck = jwt({
+//setting up jwt middleware
+const checkJwt = jwt({
     secret: jwks.expressJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 10,
-        jwksUri: "https://gpd-plan-room.auth0.com/.well-known/jwks.json"
+        jwksUri: process.env.AUTH0_DOMAIN + ".well-known/jwks.json"
     }),
-    audience: 'gpd-plan-room',
-    issuer: "https://gpd-plan-room.auth0.com/",
+    audience: process.env.AUTH0_AUDIENCE,
+    issuer: process.env.AUTH0_DOMAIN,
     algorithms: ['RS256']
 });
 
-app.use(jwtCheck);
+app.use(checkJwt);
 
+//add additional scopes for other routes like: ['read:projects', 'write:projects']
 const checkReadProjects = jwtAuthz(['read:projects']);
+const checkWriteProjects = jwtAuthz(['write:projects']);
  
 
 //routes
@@ -59,7 +76,7 @@ app.get("/api/test", checkJwt, checkReadProjects, (req,res)=> {
     );
 });
  
-app.post("/api/test", checkJwt, (req, res)=> {
+app.post("/api/test", checkJwt, checkWriteProjects,(req, res)=> {
     console.log(req.body);
     SubcontractorProfile.create(req.body).then(dbSubProfile => {
         res.json(dbSubProfile);

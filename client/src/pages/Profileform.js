@@ -9,19 +9,6 @@ class Profileform extends React.Component {
         body:""
       }
 
-      getClickRequest(){
-        axios.get("/api/test").then(res=>{
-          console.log("get test");
-        });
-      }
-    
-      getPostRequest() {
-        axios.post("/api/test", {test: true}).then(res=>{
-          console.log("post test");
-          
-        });
-      }
-
       handleInputChange = event => {
         const value = event.target.value;
         const title = event.target.name;
@@ -31,12 +18,19 @@ class Profileform extends React.Component {
       postForm = event => {
         event.preventDefault();
         const {title, body} = this.state;
-        axios.post("/api/test", {title,body}).then(res =>{
+        const { getAccessToken } = this.props.auth;
+        const accessToken = localStorage.getItem('access_token') || '';
+        if (accessToken === ''){
+            this.setState({ projects: [{_id:1, title: "Please log in to view projects"}]});
+        } else{
+        const headers = { 'Authorization': `Bearer ${getAccessToken()}` }
+        axios.post("/api/test", {title,body}, {headers}).then(res =>{
           console.log(res);
           this.setState({title: "", body:""});
           //uses react-router-dom's history method "push" to send the user to the designated route
           this.props.history.push("/");
         });
+    }
       }
 
 render(){

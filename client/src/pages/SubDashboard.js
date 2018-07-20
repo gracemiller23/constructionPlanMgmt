@@ -1,38 +1,50 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import SubconProfile from "../Components/SubconProfile";
 
 
 
 class SubDashboard extends Component {
     state = {
-        projects:[],
-        profile:{}
+        projects: [],
+        profile: {}
     }
 
     componentWillMount() {
         this.setState({ profile: {} });
         const { userProfile, getProfile } = this.props.auth;
-        if (!userProfile) {
-          getProfile((err, profile) => {
-            this.setState({ profile });
-            console.log(this.state.profile);
-          });
-        } else {
-          this.setState({ profile: userProfile });
-          console.log(this.state.profile);
+        const accessToken = localStorage.getItem('access_token') || '';
+        if (accessToken === '') {
+            this.setState({profile: {sub: "please log in to see your profile"}});
+        }else{
+            if (!userProfile) {
+                getProfile((err, profile) => {
+                    this.setState({ profile });
+                    console.log(this.state.profile);
+                });
+            } else {
+                this.setState({ profile: userProfile });
+                console.log(this.state.profile);
+            }
         }
-      }
-
-    refreshProjects(){
-        axios.get("/api/test").then((res) =>{
+    }
+    //for post, headers go after data sent to post
+    refreshProjects() {
+        const { getAccessToken } = this.props.auth;
+        const accessToken = localStorage.getItem('access_token') || '';
+        if (accessToken === ''){
+            this.setState({ projects: [{_id:1, title: "Please log in to view projects"}]});
+        } else{
+        const headers = { 'Authorization': `Bearer ${getAccessToken()}` };
+        axios.get("/api/test", { headers }).then((res) => {
             console.log(res);
-            this.setState({projects: res.data});
+            this.setState({ projects: res.data });
         });
     }
+    }
 
-    componentDidMount(){
+    componentDidMount() {
         this.refreshProjects();
     }
 
@@ -40,22 +52,22 @@ class SubDashboard extends Component {
     render() {
         return (
             <div>
-                            <Link to="/editsubprofile">Edit Profile</Link>
-    <div>
-        <SubconProfile sub={this.state.profile.sub}/>
-        </div>
-                            <div>
+                <Link to="/editsubprofile">Edit Profile</Link>
+                <div>
+                    
+                </div>
+                <div>
 
-                {
-                    this.state.projects.map( project => (
-                    <div key={project._id}>
-                        <h2>{project.title}</h2>
-                        <p>{project.body}</p>
-                        </div>
+                    {
+                        this.state.projects.map(project => (
+                            <div key={project._id}>
+                                <h2>{project.title}</h2>
+                                <p>{project.body}</p>
+                            </div>
                         ))
-            }
-            </div>
-                
+                    }
+                </div>
+
             </div>
         )
     }

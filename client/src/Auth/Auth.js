@@ -11,10 +11,10 @@ export default class Auth {
     redirectUri: origin + '/callback',
     audience: 'gpd-plan-room',
     responseType: 'token id_token',
-    scope: 'openid profile read:projects'
+    scope: 'openid profile read:projects write:projects'
   });
 
-  userProfile; 
+  userProfile;
 
   constructor() {
     this.login = this.login.bind(this);
@@ -29,6 +29,8 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
+        //add ifs based on completion of necessary steps stored in metadata
+        
         history.replace('/');
       } else if (err) {
         history.replace('/');
@@ -43,6 +45,7 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+
     // navigate to the home route
     history.replace('/home');
   }
@@ -67,22 +70,49 @@ export default class Auth {
     return new Date().getTime() < expiresAt;
   }
 
-    getAccessToken() {
-        const accessToken = localStorage.getItem('access_token');
-        if (!accessToken) {
-        throw new Error('No Access Token found');
-        }
-        return accessToken;
+  getAccessToken() {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      throw new Error('No Access Token found');
+    }
+    return accessToken;
   }
 
-    getProfile(cb) {
-        let accessToken = this.getAccessToken();
-        this.auth0.client.userInfo(accessToken, (err, profile) => {
-            if (profile) {
-            this.userProfile = profile;
+  userHasScopes(scopes) {
+    let accessToken = this.getAccessToken();
+    let hasScopes= false;
+    this.auth0.client.userInfo(accessToken, (err, profile) => {
+      if (profile) {
+        //accesses the scopes stored in the profile through a rule created in Auth0
+        const grantedScopes = profile["https://example.com/role_scopes"];
+        //if the granted scopes = the scopes requested
+        for(let i; i<scopes.length; i++){
+            if (grantedScopes.includes(scopes[i])) {
+              hasScopes = true;
+            } else {
+              hasScopes = false;
             }
-            cb(err, profile);
-  });
-}
-  
+          }
+        return hasScopes;
+      } else if (err) {
+        console.log(`Error in userHasScopes: ${err}`);
+        return false;
+      }
+
+    });
+
+
+
+  }
+
+  getProfile(cb) {
+    let accessToken = this.getAccessToken();
+    this.auth0.client.userInfo(accessToken, (err, profile) => {
+      if (profile) {
+        this.userProfile = profile;
+      }
+      cb(err, profile);
+    });
+  }
+
 }
