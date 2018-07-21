@@ -40,6 +40,8 @@ class App extends Component {
         <Route exact path="/awaitapproval" render={(props)=><NeedAdminApproval auth={auth} {...props}/>}/>
         
         <Route exact path="/buildprofile" render={(props)=><Profileform auth={auth} {...props}/>}/>
+        <Route exact path="/subdashboard" render={(props)=><SubDashboard auth={auth} {...props}/>}/>
+
         <Route exact path="/editsubprofile" render={(props)=>{
         const isAllowed = auth.isAuthenticated() && auth.userHasScopes(['write:projects']);
         return  isAllowed ?

@@ -29,9 +29,25 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        //add ifs based on completion of necessary steps stored in metadata
+        //pull values below and test for scope internally to this function?
+        console.log(`inside handle authentication: \n ${JSON.stringify(authResult)}`);
+        //problem is that these variables are undefined when the if statements start to 
+        //execute, and then the result comes through later...
+        const grantedScopes = authResult.idTokenPayload["https://example.com/role_scopes"];
+
+          //need to add admin redirect
+          //evaluate permissions based on hierarchy of permissions granted through Auth0 Rules
+          if(grantedScopes.includes("read:projects")){
+              return history.replace('/subdashboard');
+          }else if(grantedScopes.includes("profile")){
+              return history.replace('/buildprofile');
+          }else if(grantedScopes.includes("openid")){
+            this.logout();
+              return history.replace('/awaitapproval');
+          }else{
+              return history.replace('/');
+          }
         
-        history.replace('/');
       } else if (err) {
         history.replace('/');
         console.log(err);
@@ -45,9 +61,8 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
-
     // navigate to the home route
-    history.replace('/home');
+    history.replace('/');
   }
 
   login() {
@@ -78,7 +93,9 @@ export default class Auth {
     return accessToken;
   }
 
-  userHasScopes(scopes) {
+  userHasScopes(scope) {
+    console.log(`inside userHasScopes: ${scope}`)
+
     let accessToken = this.getAccessToken();
     let hasScopes= false;
     this.auth0.client.userInfo(accessToken, (err, profile) => {
@@ -86,14 +103,22 @@ export default class Auth {
         //accesses the scopes stored in the profile through a rule created in Auth0
         const grantedScopes = profile["https://example.com/role_scopes"];
         //if the granted scopes = the scopes requested
-        for(let i; i<scopes.length; i++){
-            if (grantedScopes.includes(scopes[i])) {
-              hasScopes = true;
-            } else {
-              hasScopes = false;
-            }
+      
+          if (grantedScopes.includes(scope)) {
+
+            hasScopes = true;
+            console.log(`inside userHasScopes: ${hasScopes}`)
+
+          } else {
+            hasScopes = false;
+            console.log(`inside userHasScopes: ${hasScopes}`)
+          
           }
+       
+        
+        console.log(`inside userHasScopes this is what it's returning in the end: ${hasScopes}`)
         return hasScopes;
+
       } else if (err) {
         console.log(`Error in userHasScopes: ${err}`);
         return false;
