@@ -5,7 +5,7 @@ class EditProject extends Component {
 
     return (
       <div >
-        EditProject
+        <h2>EditProject</h2>
       </div>
     );
   }

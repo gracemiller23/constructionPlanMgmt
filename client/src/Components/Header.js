@@ -10,6 +10,9 @@ import Callback from '../pages/Callback';
 import NeedAdminApproval from '../pages/NeedAdminApproval';
 import Landing from '../pages/Landing';
 import Nav from './Nav';
+import AdminDashboard from '../pages/AdminDashboard';
+import EditProject from '../pages/EditProject';
+import Project from '../pages/Project';
 
 
 
@@ -24,29 +27,97 @@ class Header extends Component {
             
                     <Router history={history}>
                         <div>
-                  
-         
                             <Nav auth={this.props.state.auth} userName={this.props.state.profile} handleStepToDash={this.props.handleStepToDash}/>
 
                             <Route exact path="/" render={(props) => <Landing auth={props.auth} {...props} />} />
-                            <Route exact path="/awaitapproval" render={(props) => <NeedAdminApproval auth={props.auth} {...props} />} />
-
-                            <Route exact path="/buildprofile" render={(props) => <Profileform auth={props.auth} {...props} />} />
                             
-                            <Route exact path="/subdashboard" render={(props) => <SubDashboard auth={props.auth} {...props} />} />
-
-                            <Route exact path="/editsubprofile" render={(props) => {
+                            <Route exact path="/awaitapproval" render={(props) => {
                                 return(
-                                    isAdmin ? (
-                                        <Profileform auth={props.auth} {...props} />
-                                    ) : (
-                                        <Redirect to="/"/>
+                                        unapprovedUser ? (
+                                            <NeedAdminApproval auth={props.auth} {...props} />
+                                        ) : (
+                                            <Redirect to="/"/>
+                                        )
                                     )
-                                )
 
-                            }
-                        
+                                }
                             } />
+
+                            <Route exact path="/buildprofile" render={(props) => {
+                                return(
+                                        needsProfile ? (
+                                            <Profileform auth={props.auth} {...props} />
+                                        ) : (
+                                            <Redirect to="/subdashboard"/>
+                                        )
+                                    )
+
+                                }
+                            } />
+
+                            <Route exact path="/editprofile" render={(props) => {
+                                return(
+                                    fullUserSubcontractor ? (
+                                            <Profileform auth={props.auth} {...props} />
+                                        ) : (
+                                            <Redirect to="/subdashboard"/>
+                                        )
+                                    )
+
+                                }
+                            } />
+
+
+                            <Route exact path="/subdashboard" render={(props) => {
+                                return(
+                                    fullUserSubcontractor ? (
+                                            <SubDashboard auth={props.auth} {...props} />
+                                        ) : (
+                                            <Redirect to="/"/>
+                                        )
+                                    )
+
+                                }
+                            } />
+
+                            
+                            <Route exact path="/admindashboard" render={(props) => {
+                                return(
+                                        isAdmin ? (
+                                            <AdminDashboard auth={props.auth} {...props} />
+                                        ) : (
+                                            <Redirect to="/subdashboard"/>
+                                        )
+                                    )
+
+                                }
+                            } />
+
+                             <Route path="/project/:id" render={(props) => {
+                                return(
+                                    fullUserSubcontractor ? (
+                                            <Project auth={props.auth} {...props} />
+                                        ) : (
+                                            <Redirect to="/"/>
+                                        )
+                                    )
+
+                                }
+                            } />
+
+                            <Route path="/editproject/:id" render={(props) => {
+                                return(
+                                        isAdmin ? (
+                                            <EditProject auth={props.auth} {...props} />
+                                        ) : (
+                                            <Redirect to="/subdashboard"/>
+                                        )
+                                    )
+
+                                }
+                            } />
+
+
 
                             <Route path="/callback" render={(props) => {
                                 this.props.state.auth.handleAuthentication(props);

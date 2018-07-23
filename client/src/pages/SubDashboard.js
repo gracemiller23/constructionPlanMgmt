@@ -33,21 +33,21 @@ class SubDashboard extends Component {
     }
     //for post, headers go after data sent to post
     refreshProjects() {
-        const { getAccessToken } = this.props.auth;
-        const accessToken = localStorage.getItem('access_token') || '';
-        if (accessToken === ''){
-            this.setState({ projects: [{_id:1, title: "Please log in to view projects"}]});
-        } else{
-        const headers = { 'Authorization': `Bearer ${getAccessToken()}` };
-        axios.get("/api/profile", { headers }).then((res) => {
-            console.log(res);
-            this.setState({ profile: res.data });
-        });
-    }
+        // const { getAccessToken } = this.props.auth;
+        // const accessToken = localStorage.getItem('access_token') || '';
+        // if (accessToken === ''){
+        //     this.setState({ projects: [{_id:1, title: "Please log in to view projects"}]});
+        // } else{
+        // const headers = { 'Authorization': `Bearer ${getAccessToken()}` };
+        // axios.get("/api/profile", { headers }).then((res) => {
+        //     console.log(res);
+        //     this.setState({ profile: res.data });
+        // });
+    //}
     }
 
     componentDidMount() {
-        this.refreshProjects();
+       // this.refreshProjects();
     }
     // was inside the render
     //{
@@ -59,13 +59,15 @@ class SubDashboard extends Component {
     //     ))
     // }
 
+    // <div>
+    // <Link to="/editsubprofile">Edit Profile</Link>
+    // <div>
+    //     <p>{JSON.stringify(this.state.profile)}</p>
+    // </div>
+
     render() {
         return (
-            <div>
-                <Link to="/editsubprofile">Edit Profile</Link>
-                <div>
-                    <p>{JSON.stringify(this.state.profile)}</p>
-                </div>
+           
 
                 <UserConsumer>
                 {prov => (
@@ -73,7 +75,7 @@ class SubDashboard extends Component {
 
             )}
             </UserConsumer>
-            </div>
+          
         )
     }
 }

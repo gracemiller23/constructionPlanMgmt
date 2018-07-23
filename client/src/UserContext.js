@@ -29,7 +29,7 @@ class UserProvider extends React.Component {
             const { userProfile, getProfile } = lauth;
             if (!userProfile) {
               getProfile((err, profile) => {
-                this.setState({ profile: profile.sub});
+                this.setState({ profile: profile.name});
                 console.log("_____________________");
                 console.log("SETTING THE USER NAME IN PROFILE OF STATE")
                 console.log(this.state.profile)
@@ -37,7 +37,7 @@ class UserProvider extends React.Component {
 
                 });
             } else {
-                this.setState({ profile: userProfile.sub});
+                this.setState({ profile: userProfile.name});
             }
         }else{
             console.log("login first")
@@ -67,7 +67,7 @@ class UserProvider extends React.Component {
 
         if(isAdmin){
             console.log("redirecting **************")
-            window.location.href= "/editsubprofile";
+            window.location.href= "/admindashboard";
         }else if(isSubContractor){
             window.location.href="/subdashboard";
         }else{
