@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import SubconProfile from "../Components/SubconProfile";
+//import SubconProfile from "../Components/SubconProfile";
+import { UserConsumer } from '../UserContext';
 
+import Name from "../Components/Name";
 
 
 class SubDashboard extends Component {
@@ -64,8 +66,13 @@ class SubDashboard extends Component {
                 <div>
                     <p>{JSON.stringify(this.state.profile)}</p>
                 </div>
-                
 
+                <UserConsumer>
+                {prov => (
+                <Name userName={prov.state.profile}/>
+
+            )}
+            </UserConsumer>
             </div>
         )
     }

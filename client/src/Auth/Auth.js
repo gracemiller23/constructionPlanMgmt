@@ -37,10 +37,8 @@ export default class Auth {
 
           //need to add admin redirect
           //evaluate permissions based on hierarchy of scopes granted through Auth0 Rules
-          if(grantedScopes.includes("write:projects")){
-              return history.replace('/editsubprofile');
-          }else if(grantedScopes.includes("read:projects")){
-            return history.replace('/subdashboard');
+         if(grantedScopes.includes("read:projects")){
+            return history.replace('/');
         }else if(grantedScopes.includes("profile")){
               return history.replace('/buildprofile');
           }else if(grantedScopes.includes("openid")){
@@ -65,6 +63,9 @@ export default class Auth {
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+
+    const scopes = authResult.scope || this.requestedScopes || "";
+    localStorage.setItem("scopes", JSON.stringify(scopes));
     // navigate to the home route
     history.replace('/');
   }
@@ -99,33 +100,12 @@ export default class Auth {
     return accessToken;
   }
 
-  userHasScopes(scope) {
+  userHasScopes(scopes) {
 
-    let accessToken = this.getAccessToken();
-    let hasScopes= false;
-    this.auth0.client.userInfo(accessToken, (err, profile) => {
-      if (profile) {
-        //accesses the scopes stored in the profile through a rule created in Auth0
-        const grantedScopes = profile["https://example.com/role_scopes"];
-        //if the granted scopes = the scopes requested
-      
-          if (grantedScopes.includes(scope)) {
-
-            hasScopes = true;
-
-          } else {
-            hasScopes = false;
-          
-          }
-       
-        return hasScopes;
-
-      } else if (err) {
-        console.log(`Error in userHasScopes: ${err}`);
-        return false;
-      }
-
-    });
+    let _scopes = JSON.parse(localStorage.getItem("scopes")) || " ";
+   console.log(_scopes);
+   const grantedScopes = _scopes.split(' ');
+   return scopes.every(scope => grantedScopes.includes(scope));
 
   }
 

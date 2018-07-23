@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Header from './Components/Header';
-import { UserProvider } from './UserContext';
+import { UserProvider, UserConsumer } from './UserContext';
+
+
 
 // import {Router, Route, Redirect} from "react-router-dom";
 
@@ -29,7 +31,11 @@ class App extends Component {
     return (
       <div>
         <UserProvider>
-          <Header />
+        <UserConsumer>
+                {prov => (
+          <Header state={prov.state} handleLogin={prov.handleLogin} handleLogout={prov.handleLogout} handleStepToDash={prov.handleStepToDash}/>
+        )}
+        </UserConsumer>
           </UserProvider>
       </div>
 //<Router history={history}>

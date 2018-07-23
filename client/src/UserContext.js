@@ -5,78 +5,83 @@ import Auth from './Auth/Auth';
 const lauth = new Auth();
 
 
-const handleAuthentication = (nextState, replace) => {
-  if (/access_token|id_token|error/.test(nextState.location.hash)) {
-    lauth.handleAuthentication();
-
-  }
-}
-
-let authThisShit = lauth.isAuthenticated();
-
 const UserContext = React.createContext();
 
 class UserProvider extends React.Component {
     state = { 
-        auth: {}, 
-        handleAuthentication: handleAuthentication,
-        loggedIn: true,
+        auth: lauth, 
+        handleAuthentication: lauth.handleAuthentication,
+
         profile:""
    
     }
 //soon to be depracated lifecycle event - don't use
     componentWillMount(){
         console.log("in willMount");
-        console.log(authThisShit);
-        console.log("____________________")
-        if(authThisShit){
-            this.setState({loggedIn: true});
-        }
+    
         
     }
 
     componentDidMount (){
         console.log("the component mounted")
         console.log(lauth);
-       
-        if(authThisShit){
+            if(lauth.isAuthenticated()){
             const { userProfile, getProfile } = lauth;
             if (!userProfile) {
               getProfile((err, profile) => {
-                this.setState({ auth: lauth, profile: profile.sub, loggedIn: true });
-              });
+                this.setState({ profile: profile.sub});
+                console.log("_____________________");
+                console.log("SETTING THE USER NAME IN PROFILE OF STATE")
+                console.log(this.state.profile)
+                console.log("_____________________");
+
+                });
             } else {
-             
-                    this.setState({ profile: userProfile.sub, loggedIn: true });
-              
+                this.setState({ profile: userProfile.sub});
             }
         }else{
             console.log("login first")
-            this.setState({loggedIn: false})
         }
-   
+
     }
 
     handleLogin =()=>{
         lauth.login();
-        this.setState({loggedIn: true});
 
     }
 
 
     handleLogout = ()=>{
         lauth.logout();
-        this.setState({loggedIn: false, profile: ""});
+        this.setState({profile: ""});
 
+    }
+
+    handleStepToDash =()=>{
+        const isAdmin = lauth.userHasScopes(["write:projects"]);
+        const isSubContractor = lauth.userHasScopes(["read:projects"]);
+        
+        //const origin = window.location.origin;
+
+
+
+        if(isAdmin){
+            console.log("redirecting **************")
+            window.location.href= "/editsubprofile";
+        }else if(isSubContractor){
+            window.location.href="/subdashboard";
+        }else{
+            window.location.href="/";
+        }
     }
 
     render() {
         console.log("inside of render")
-        console.log(this.state.loggedIn);
+        console.log(this.state.profile);
 
       return (
         <UserContext.Provider
-          value={{state:this.state, handleLogin: this.handleLogin, handleLogout: this.handleLogout}}
+          value={{state:this.state, handleLogin: this.handleLogin, handleLogout: this.handleLogout, handleStepToDash: this.handleStepToDash}}
         >
           {this.props.children}
         </UserContext.Provider>
