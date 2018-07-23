@@ -12,22 +12,22 @@ class SubDashboard extends Component {
     }
 
     componentWillMount() {
-        this.setState({ profile: {} });
-        const { userProfile, getProfile } = this.props.auth;
-        const accessToken = localStorage.getItem('access_token') || '';
-        if (accessToken === '') {
-            this.setState({profile: {sub: "please log in to see your profile"}});
-        }else{
-            if (!userProfile) {
-                getProfile((err, profile) => {
-                    this.setState({ profile });
-                    console.log(this.state.profile);
-                });
-            } else {
-                this.setState({ profile: userProfile });
-                console.log(this.state.profile);
-            }
-        }
+        // this.setState({ profile: {} });
+        // const { userProfile, getProfile } = this.props.auth;
+        // const accessToken = localStorage.getItem('access_token') || '';
+        // if (accessToken === '') {
+        //     this.setState({profile: {sub: "please log in to see your profile"}});
+        // }else{
+        //     if (!userProfile) {
+        //         getProfile((err, profile) => {
+        //             this.setState({ profile });
+        //             console.log(this.state.profile);
+        //         });
+        //     } else {
+        //         this.setState({ profile: userProfile });
+        //         console.log(this.state.profile);
+        //     }
+        // }
     }
     //for post, headers go after data sent to post
     refreshProjects() {
@@ -37,9 +37,9 @@ class SubDashboard extends Component {
             this.setState({ projects: [{_id:1, title: "Please log in to view projects"}]});
         } else{
         const headers = { 'Authorization': `Bearer ${getAccessToken()}` };
-        axios.get("/api/test", { headers }).then((res) => {
+        axios.get("/api/profile", { headers }).then((res) => {
             console.log(res);
-            this.setState({ projects: res.data });
+            this.setState({ profile: res.data });
         });
     }
     }
@@ -47,26 +47,24 @@ class SubDashboard extends Component {
     componentDidMount() {
         this.refreshProjects();
     }
-
+    // was inside the render
+    //{
+    //     this.state.projects.map(project => (
+    //         <div key={project._id}>
+    //             <h2>{project.title}</h2>
+    //             <p>{project.body}</p>
+    //         </div>
+    //     ))
+    // }
 
     render() {
         return (
             <div>
                 <Link to="/editsubprofile">Edit Profile</Link>
                 <div>
-                    
+                    <p>{JSON.stringify(this.state.profile)}</p>
                 </div>
-                <div>
-
-                    {
-                        this.state.projects.map(project => (
-                            <div key={project._id}>
-                                <h2>{project.title}</h2>
-                                <p>{project.body}</p>
-                            </div>
-                        ))
-                    }
-                </div>
+                
 
             </div>
         )

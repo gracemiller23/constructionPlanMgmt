@@ -59,21 +59,32 @@ const checkJwt = jwt({
 app.use(checkJwt);
 
 //add additional scopes for other routes like: ['read:projects', 'write:projects']
+const checkSelfProfile = jwtAuthz(['profile']);
 const checkReadProjects = jwtAuthz(['read:projects']);
 const checkWriteProjects = jwtAuthz(['write:projects']);
- 
+const checkReadSubProfile = jwtAuthz(['read:subprofile']);
+const checkPutSubProfile = jwtAuthz(['update:subprofile']);
+const checkWriteSubInviteReply = jwtAuthz(['write:subinvitereply']);
+const checkReadSubInviteReply = jwtAuthz(['read:subinvitereply']);
 
-//routes
-
-app.get("/", (req,res)=> {
-    res.send("hi");
-});
+//---------------------------------routes-------------------------------------//
 
 app.get("/api/test", checkJwt, checkReadProjects, (req,res)=> {
     SubcontractorProfile.find({}).sort({createdAt: -1}).then(results => {
         res.json(results)
         }
     );
+});
+
+//routes for profile elements stored in MongoDB
+app.get("/api/profile", checkJwt, checkSelfProfile, (req,res)=> {
+    console.log(`inside route and I am working`);
+        res.json("I worked!");
+});
+
+app.post("/api/profile", checkJwt, checkSelfProfile, (req,res)=> {
+    console.log(`inside route and I am working`);
+        res.json("I worked!");
 });
  
 app.post("/api/test", checkJwt, checkWriteProjects,(req, res)=> {
@@ -86,11 +97,10 @@ app.post("/api/test", checkJwt, checkWriteProjects,(req, res)=> {
 //if no other route is matched
 app.use(function(req,res){
     res.sendFile(path.join(__dirname, "client/build/index.html"));
-})
+}); 
 
+//--------------------------------- end routes-------------------------------------//
 
-//adding the mongoose schemas here
- 
 
 
 //starting up the server

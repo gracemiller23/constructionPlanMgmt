@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Header from './Components/Header';
+import { UserProvider } from './UserContext';
 
 // import {Router, Route, Redirect} from "react-router-dom";
 
@@ -26,9 +27,12 @@ class App extends Component {
     // const {isAuthenticated} = auth;
 
     return (
-      <Header />
-
-//       <Router history={history}>
+      <div>
+        <UserProvider>
+          <Header />
+          </UserProvider>
+      </div>
+//<Router history={history}>
 //       <div >
 //         <div>
 //           {

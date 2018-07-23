@@ -15,6 +15,7 @@ export default class Auth {
   });
 
   userProfile;
+  loggedIn;
 
   constructor() {
     this.login = this.login.bind(this);
@@ -31,17 +32,19 @@ export default class Auth {
         this.setSession(authResult);
         //pull values below and test for scope internally to this function?
         console.log(`inside handle authentication: \n ${JSON.stringify(authResult)}`);
-        //problem is that these variables are undefined when the if statements start to 
-        //execute, and then the result comes through later...
+       this.loggedIn = true;
         const grantedScopes = authResult.idTokenPayload["https://example.com/role_scopes"];
 
           //need to add admin redirect
-          //evaluate permissions based on hierarchy of permissions granted through Auth0 Rules
-          if(grantedScopes.includes("read:projects")){
-              return history.replace('/subdashboard');
-          }else if(grantedScopes.includes("profile")){
+          //evaluate permissions based on hierarchy of scopes granted through Auth0 Rules
+          if(grantedScopes.includes("write:projects")){
+              return history.replace('/editsubprofile');
+          }else if(grantedScopes.includes("read:projects")){
+            return history.replace('/subdashboard');
+        }else if(grantedScopes.includes("profile")){
               return history.replace('/buildprofile');
           }else if(grantedScopes.includes("openid")){
+            //add user to the mongo database
             this.logout();
               return history.replace('/awaitapproval');
           }else{
@@ -49,6 +52,7 @@ export default class Auth {
           }
         
       } else if (err) {
+        this.loggedIn = false;
         history.replace('/');
         console.log(err);
       }
@@ -67,6 +71,8 @@ export default class Auth {
 
   login() {
     this.auth0.authorize();
+    this.loggedIn = true;
+   
   }
 
   logout() {
@@ -94,7 +100,6 @@ export default class Auth {
   }
 
   userHasScopes(scope) {
-    console.log(`inside userHasScopes: ${scope}`)
 
     let accessToken = this.getAccessToken();
     let hasScopes= false;
@@ -107,16 +112,12 @@ export default class Auth {
           if (grantedScopes.includes(scope)) {
 
             hasScopes = true;
-            console.log(`inside userHasScopes: ${hasScopes}`)
 
           } else {
             hasScopes = false;
-            console.log(`inside userHasScopes: ${hasScopes}`)
           
           }
        
-        
-        console.log(`inside userHasScopes this is what it's returning in the end: ${hasScopes}`)
         return hasScopes;
 
       } else if (err) {
@@ -125,8 +126,6 @@ export default class Auth {
       }
 
     });
-
-
 
   }
 
