@@ -1,0 +1,141 @@
+/* ---------- Global Styles ----------*/
+
+.centertxt{
+    text-align: center;
+}
+
+a {
+    color: #234589;
+}
+
+.tab-pane {
+    padding: 2%;
+}
+
+form {
+    width: 80%;
+    margin: 1% auto;
+}
+
+/* home page */
+.home{
+ background-image: url("./blueprints2.jpeg");
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.home-sign-in{
+    margin: 10% auto;
+    max-width: 50%;
+}
+
+.home-sign-in-box{
+    border:1px solid black;
+    box-shadow: -20px 20px 17px gray;
+
+}
+
+.blue{
+    background-color: #234589;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* ---------- Nav Styles ----------*/
+
+.navbar{
+    border-bottom:1px solid black;
+    margin-bottom: 1%;
+
+    box-shadow: 0px 8px 5px gray;
+
+}
+
+.logo{
+    height:80px;
+    width:auto;
+}
+
+.nav-button{
+    border:none;
+    background-color: inherit;
+    padding-top:11%;
+}
+
+/* ---------- Dashboard Styles ----------*/
+
+.dashboard-main {
+    border-radius: 25px;
+    background-color: #eeeeee;
+    border: 1px solid black;
+    margin: 2% 5%;
+    padding: 2%;
+    box-shadow: -3px 6px 5px gray;
+
+}
+.list-group-item.active {
+    border: 2px solid black;
+    background-color: lightgray;
+    color: black;
+}
+
+.list-group-item.active::after {
+    content: "     >>" !important;
+}
+
+.dash-overview{
+    border-bottom:1px solid black;
+    padding: 2% 2% 0 2%;
+    margin: 0 2% 0 2%;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+/* ---------- Form Styles ----------*/
+
+.form-group label {
+    font-weight:bold;
+}
+
+
+/* ---------- Project Styles ----------*/
+.proj-progress{
+
+    width: 96%;
+    margin: 2% auto;
+}
+
+
+
+/* ---------- Footer Styles ----------*/
+
+
+.footer {
+    position: absolute;
+    bottom: -5;
+    width: 100%;
+    height: 50px;
+    margin-top: 2%;
+    line-height: 60px;
+    background-color: white;
+    box-shadow: 0px -3px 3px gray;
+
+}
+
+
+
+
+/* ---------- Media Styles ----------*/
+
+@media only screen and (max-width: 800px) {
+     
+        .home-sign-in{
+            margin: 10% auto;
+            max-width: 70%;
+        }
+    
+}

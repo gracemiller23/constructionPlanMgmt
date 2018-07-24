@@ -4,6 +4,8 @@ import { Router, Route, Redirect } from "react-router-dom";
 import history from '../history';
 
 
+
+
 import SubDashboard from '../pages/SubDashboard';
 import Profileform from '../pages/Profileform';
 import Callback from '../pages/Callback';
@@ -81,10 +83,22 @@ class Header extends Component {
                             } />
 
                             
-                            <Route exact path="/admindashboard" render={(props) => {
+                            <Route exact path="/dashboard" render={(props) => {
                                 return(
                                         isAdmin ? (
                                             <AdminDashboard auth={props.auth} {...props} />
+                                        ) : (
+                                            <Redirect to="/subdashboard"/>
+                                        )
+                                    )
+
+                                }
+                            } />
+
+                                  <Route exact path="/newproject" render={(props) => {
+                                return(
+                                        isAdmin ? (
+                                            <EditProject auth={props.auth} {...props} />
                                         ) : (
                                             <Redirect to="/subdashboard"/>
                                         )

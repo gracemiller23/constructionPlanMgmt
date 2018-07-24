@@ -41,7 +41,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //serve files out of the client/build folder of the react app
-app.use(express.static("client/build"));
+//app.use(express.static("client/build"));
 
 //setting up jwt middleware
 const checkJwt = jwt({
