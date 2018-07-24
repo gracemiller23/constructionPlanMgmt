@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
 import Logo from '../GPDLOGO.png';
 import '../AppStyle.css';
 
@@ -26,24 +25,24 @@ class Nav extends Component {
                                 </li>
                             ) : (
                                     <li className="nav-item active">
-                                        <a className="nav-link" href="/dashboard">Dashboard <span class="sr-only">(current)</span></a>
+                                        <a className="nav-link" href="/dashboard">Dashboard <span className="sr-only">(current)</span></a>
                                     </li>
                                 )}
 
  {(loggedIn && isAdmin) ? ( <li className="nav-item">
-                                <a class="nav-link" href="/newproject">+ Add Project</a>
+                                <a className="nav-link" href="/newproject">+ Add Project</a>
                             </li>) : ( <li className="nav-item">
                             </li>)}
 
                             <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a className="nav-link dropdown-toggle"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Help
                           </a>
                                 <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a className="dropdown-item" href="#">How to Use</a>
-                                    <a className="dropdown-item" href="#">My Account</a>
+                                    <a className="dropdown-item" href="/">How to Use</a>
+                                    <a className="dropdown-item" href="/">My Account</a>
                                     <div className="dropdown-divider"></div>
-                                    <a className="dropdown-item" href="#">Request Help</a>
+                                    <a className="dropdown-item" href="/">Request Help</a>
                                 </div>
                             </li>
                             {(!loggedIn) ? (

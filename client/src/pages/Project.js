@@ -4,8 +4,8 @@ class Project extends Component {
   render() {
 
     return (
-      <div >
- Project page
+      <div className="container-fluid">
+          {this.props.match.params.id}
       </div>
     );
   }

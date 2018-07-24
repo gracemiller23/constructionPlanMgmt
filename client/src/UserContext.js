@@ -67,7 +67,7 @@ class UserProvider extends React.Component {
 
         if(isAdmin){
             console.log("redirecting **************")
-            window.location.href= "/admindashboard";
+            window.location.href= "/dashboard";
         }else if(isSubContractor){
             window.location.href="/subdashboard";
         }else{

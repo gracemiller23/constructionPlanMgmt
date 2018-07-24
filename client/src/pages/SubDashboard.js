@@ -71,7 +71,9 @@ class SubDashboard extends Component {
 
                 <UserConsumer>
                 {prov => (
-                <Name userName={prov.state.profile}/>
+                      <div className="container-fluid">
+                                    <Name userName={prov.state.profile}/>
+                  </div>
 
             )}
             </UserConsumer>

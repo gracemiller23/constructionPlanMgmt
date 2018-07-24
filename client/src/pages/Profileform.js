@@ -35,7 +35,7 @@ class Profileform extends React.Component {
 
 render(){
     return (
-        <div>
+        <div className="container-fluid">
             <Link to="/">Home</Link>
         <form>
             <input name="title" value={this.state.title} onChange={this.handleInputChange} />

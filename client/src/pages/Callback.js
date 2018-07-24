@@ -4,7 +4,7 @@ class Callback extends Component {
   render() {
 
     return (
-      <div >
+      <div className="container-fluid">
         Loading ...
       </div>
     );

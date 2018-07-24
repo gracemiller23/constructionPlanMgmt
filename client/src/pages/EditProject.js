@@ -4,7 +4,7 @@ class EditProject extends Component {
   render() {
 
     return (
-      <div >
+      <div className="container-fluid">
         <h2>EditProject</h2>
       </div>
     );

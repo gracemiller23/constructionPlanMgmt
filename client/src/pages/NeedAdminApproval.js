@@ -4,7 +4,7 @@ class NeedAdminApproval extends Component {
   render() {
 
     return (
-      <div >
+      <div className="container-fluid">
         Your account must be approved by an admin before you can proceed. If you have any questions please use the contact form below.
       </div>
     );
