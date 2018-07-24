@@ -25,3 +25,5 @@ TextArea.propTypes = {
 };
 
 export default TextArea;
+
+//special thanks to Loren Stewart for an amazing react forms tutorial!

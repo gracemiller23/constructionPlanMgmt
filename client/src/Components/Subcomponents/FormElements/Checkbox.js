@@ -31,3 +31,5 @@ Checkbox.propTypes = {
 };
 
 export default Checkbox; 
+
+//special thanks to Loren Stewart for an amazing react forms tutorial!

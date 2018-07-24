@@ -7,7 +7,7 @@ import { UserConsumer } from '../UserContext';
 class Landing extends Component {
 
   render() {
-    //check loggedIn
+
     return (
       <UserConsumer>
       {prov => (
