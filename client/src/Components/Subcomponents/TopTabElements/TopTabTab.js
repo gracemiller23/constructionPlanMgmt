@@ -6,18 +6,25 @@ const TopTabTab = (props) => {
     //title (required) 
     //linkId (required) - will need to match aria-labelledby in its content area
     //linkClasses - add active here for the one that will be open first
+    //tabClasses - add ml-auto if you want to right justify a tab
     //linkToId (required) - id of content to link to withOUT #
     //selected (required) - true or false - set the one open first to true and others to false
+    //<TopTabTab title="" linkId="" linkClasses="" linkToId="" selected=""/>
+
     
     let linkClasses = "nav-link ";
     if(props.linkClasses){
-        classes = "nav-link " + props.linkClasses;
+        linkClasses = "nav-link " + props.linkClasses;
+    }
+    let tabClasses = "nav-item ";
+    if(props.tabClasses){
+        tabClasses = "nav-item " + props.tabClasses;
     }
     let linkTo = "#"+props.linkToId;
 
     return (
         <li className="nav-item">
-            <a className={classes} id={props.linkId} data-toggle="tab" href={linkTo} aria-controls={props.linkToId} role="tab">
+            <a className={linkClasses} id={props.linkId} data-toggle="tab" href={linkTo} aria-controls={props.linkToId} role="tab">
                 {props.title}
                 </a>
         </li>
@@ -25,3 +32,27 @@ const TopTabTab = (props) => {
   }
 
   export default TopTabTab;
+
+
+//   <TopTabTabCont tabContId="">
+
+//                     <TopTabTab title="" linkId="" linkClasses="active" linkToId="" selected=""/>
+//                     <TopTabTab title="" linkId="" linkClasses="" linkToId="" selected=""/>
+//                     <TopTabTab title="" linkId="" linkClasses="" linkToId="" selected=""/>
+//                     <TopTabTab title="" linkId="" linkClasses="" linkToId="" selected=""/>
+
+//                   </TopTabTabCont>
+//                 <TopTabBodyCont tabBodyId="">
+//                       <TopTabBody tabBodyClasses="show active" tabBodyId="" tabTopId="">
+                        
+//                         </TopTabBody>
+//                         <TopTabBody tabBodyClasses="" tabBodyId="" tabTopId="">
+                        
+//                         </TopTabBody>
+//                         <TopTabBody tabBodyClasses="" tabBodyId="" tabTopId="">
+                        
+//                         </TopTabBody>
+//                         <TopTabBody tabBodyClasses="" tabBodyId="" tabTopId="">
+                        
+//                         </TopTabBody>
+//                   </TopTabBodyCont>

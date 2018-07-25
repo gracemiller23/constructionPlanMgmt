@@ -3,6 +3,7 @@ import React from 'react';
 
 const TopTabTabCont = (props) => {
     //props include: classes, tabContId (required), 
+    // <TopTabTabCont tabContId=""></TopTabTabCont>
 
     let classes = "nav nav-tabs ";
     if(props.classes){

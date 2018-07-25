@@ -72,7 +72,38 @@ class SubDashboard extends Component {
                 <UserConsumer>
                 {prov => (
                       <div className="container-fluid">
-                               <div>This is the dashboard</div>
+                              <Dashboard>
+        <div class="row">
+
+        </div>
+        <div class="row">
+            <div class="col">
+                <TopTabTabCont tabContId="">
+
+                    <TopTabTab title="" linkId="" linkClasses="active" linkToId="" selected=""/>
+                    <TopTabTab title="" linkId="" linkClasses="" linkToId="" selected=""/>
+                    <TopTabTab title="" linkId="" linkClasses="" linkToId="" selected=""/>
+                    <TopTabTab title="" linkId="" tabClasses="ml-auto" linkClasses="" linkToId="" selected=""/>
+
+                  </TopTabTabCont>
+                <TopTabBodyCont tabBodyId="">
+                      <TopTabBody tabBodyClasses="show active" tabBodyId="" tabTopId="">
+                        
+                        </TopTabBody>
+                        <TopTabBody tabBodyId="" tabTopId="">
+                        
+                        </TopTabBody>
+                        <TopTabBody tabBodyId="" tabTopId="">
+                        
+                        </TopTabBody>
+                        <TopTabBody tabBodyId="" tabTopId="">
+                        
+                        </TopTabBody>
+                  </TopTabBodyCont>
+            </div>
+        </div>
+
+        </Dashboard>      
                   </div>
 
             )}
