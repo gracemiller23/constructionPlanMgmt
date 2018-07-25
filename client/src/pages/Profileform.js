@@ -1,12 +1,83 @@
 import React from "react";
 import axios from "axios";
-import {Link, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 
+import Checkbox from "../Components/Subcomponents/FormElements/Checkbox";
+import SelectInput from "../Components/Subcomponents/FormElements/SelectInput";
+import SingleInput from "../Components/Subcomponents/FormElements/SingleInput";
 
 class Profileform extends React.Component {
     state = {
-        title:"",
-        body:""
+            auth0Id: "",
+            profileStage: "",
+            companyName: "",
+            companyAddress1: "",
+            companyAddress2:"",
+            companyCity:"",
+            companyState:"",
+            companyZip:00000,
+            contactName:{
+                firstName: "",
+                lastName: ""},
+            contactPhone:0000000000,
+            contactEmail:"",
+            tradeCategory:"Select",
+            tradeCategories:["Earth Work", "Site Utilities", "Fuel System", "Fencing", "Landscaping", "Irrigation", "Concrete", "Masonry", "Structural and Misc. Steel", "Roofing", "Doors/Frames/Hardware", "Glass and Glazing", "EIFS/Simulated Stone"],
+            statesUS:["Alaska",
+            "Alabama",
+            "Arkansas",
+            "American Samoa",
+            "Arizona",
+            "California",
+            "Colorado",
+            "Connecticut",
+            "District of Columbia",
+            "Delaware",
+            "Florida",
+            "Georgia",
+            "Guam",
+            "Hawaii",
+            "Iowa",
+            "Idaho",
+            "Illinois",
+            "Indiana",
+            "Kansas",
+            "Kentucky",
+            "Louisiana",
+            "Massachusetts",
+            "Maryland",
+            "Maine",
+            "Michigan",
+            "Minnesota",
+            "Missouri",
+            "Mississippi",
+            "Montana",
+            "North Carolina",
+            " North Dakota",
+            "Nebraska",
+            "New Hampshire",
+            "New Jersey",
+            "New Mexico",
+            "Nevada",
+            "New York",
+            "Ohio",
+            "Oklahoma",
+            "Oregon",
+            "Pennsylvania",
+            "Puerto Rico",
+            "Rhode Island",
+            "South Carolina",
+            "South Dakota",
+            "Tennessee",
+            "Texas",
+            "Utah",
+            "Virginia",
+            "Virgin Islands",
+            "Vermont",
+            "Washington",
+            "Wisconsin",
+            "West Virginia",
+            "Wyoming"]
       }
 
       handleInputChange = event => {
@@ -32,15 +103,12 @@ class Profileform extends React.Component {
         });
     }
       }
-
+//remove ) and - and . from phone numbers
 render(){
     return (
         <div className="container-fluid">
-            <Link to="/">Home</Link>
         <form>
-            <input name="title" value={this.state.title} onChange={this.handleInputChange} />
-            <textarea name="body" value={this.state.body} onChange={this.handleInputChange}></textarea>
-            <button onClick={this.postForm}>Submit</button>
+           
         </form>
 </div>
 

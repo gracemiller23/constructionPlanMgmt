@@ -27,8 +27,8 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/plan-room");
 
 //import schemas
 //how to import multiple models
-//const db = require("./models");
-const SubcontractorProfile = require("./models/subcontractor");
+const db = require("./models");
+//const SubcontractorProfile = require("./models/subcontractor");
 
 const corsOptions ={
     origin: 'http://localhost:3000'
@@ -59,6 +59,7 @@ const checkJwt = jwt({
 app.use(checkJwt);
 
 //add additional scopes for other routes like: ['read:projects', 'write:projects']
+const checkFirstUser = jwtAuthz(['openid']);
 const checkSelfProfile = jwtAuthz(['profile']);
 const checkReadProjects = jwtAuthz(['read:projects']);
 const checkWriteProjects = jwtAuthz(['write:projects']);
@@ -70,11 +71,18 @@ const checkReadSubInviteReply = jwtAuthz(['read:subinvitereply']);
 //---------------------------------routes-------------------------------------//
 
 app.get("/api/test", checkJwt, checkReadProjects, (req,res)=> {
-    SubcontractorProfile.find({}).sort({createdAt: -1}).then(results => {
+    db.SubcontractorProfile.find({}).sort({createdAt: -1}).then(results => {
         res.json(results)
         }
     );
 });
+
+app.post("/api/firstprofile", checkJwt, checkFirstUser, (req, res)=>{
+    db.SubcontractorProfile.create(req.body).then(dbSubProfile => {
+        console.log(dbSubProfile)
+        res.json(dbSubProfile);
+    })
+} )
 
 //routes for profile elements stored in MongoDB
 app.get("/api/profile", checkJwt, checkSelfProfile, (req,res)=> {

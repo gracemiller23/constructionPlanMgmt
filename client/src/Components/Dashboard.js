@@ -5,8 +5,8 @@ const Dashboard = (props) => {
   //simply a container - props passed as children
 
     return (
-        <div class="row ">
-            <div class="col dashboard-main">
+        <div className="row ">
+            <div className="col dashboard-main">
                  {props.children}
             </div>
         </div>

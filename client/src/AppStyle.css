@@ -34,6 +34,7 @@ form {
 .home-sign-in-box{
     border:1px solid black;
     box-shadow: -20px 20px 17px gray;
+    border-radius: 10px;
 
 }
 

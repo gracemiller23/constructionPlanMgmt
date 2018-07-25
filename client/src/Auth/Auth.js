@@ -1,6 +1,7 @@
 // src/Auth/Auth.js
 import auth0 from 'auth0-js';
 import history from "../history";
+import axios from "axios";
 
 const origin = window.location.origin;
 
@@ -37,15 +38,28 @@ export default class Auth {
 
           //need to add admin redirect
           //evaluate permissions based on hierarchy of scopes granted through Auth0 Rules
-         if(grantedScopes.includes("read:projects")){
+        if(grantedScopes.includes("read:projects")){
             return history.replace('/');
         }else if(grantedScopes.includes("profile")){
               return history.replace('/buildprofile');
-          }else if(grantedScopes.includes("openid")){
-            //add user to the mongo database
-            this.logout();
-              return history.replace('/awaitapproval');
-          }else{
+        }else if(grantedScopes.includes("openid")){
+              //add user to the mongo database
+                  const accessToken = authResult.accessToken || '';
+                  if (accessToken === ''){
+                    this.logout();
+                  } else{
+                  const headers = { 'Authorization': `Bearer ${authResult.accessToken}` }
+                  axios.post("/api/firstprofile", {auth0Id: authResult.idTokenPayload.sub, contactEmail: authResult.idTokenPayload.name, profileStage:"incomplete"}, {headers}).then(res =>{
+                    console.log(res);
+                    //uses react-router-dom's history method "push" to send the user to the designated route
+                    this.logout();
+                    return history.replace('/awaitapproval');
+                    
+                  });
+
+                  
+          }
+        }else{
               return history.replace('/');
           }
         
