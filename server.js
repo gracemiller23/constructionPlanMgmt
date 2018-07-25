@@ -77,12 +77,23 @@ app.get("/api/test", checkJwt, checkReadProjects, (req,res)=> {
     );
 });
 
+//route for creating a profile entry with an auth0 id after the user's very first login, which is immediately logged out
+
 app.post("/api/firstprofile", checkJwt, checkFirstUser, (req, res)=>{
     db.SubcontractorProfile.create(req.body).then(dbSubProfile => {
         console.log(dbSubProfile)
         res.json(dbSubProfile);
     })
 } )
+
+//route for admin profile getting - must create in PostMan
+
+app.get("/api/adminprofile/:id", checkJwt, checkWriteProjects, (req,res)=> {
+    let userAuth0Id = req.params.id;
+    db.AdminProfile.findOne({auth0Id: userAuth0Id}).then(results => {
+        res.json(results)
+    });
+});
 
 //routes for profile elements stored in MongoDB
 app.get("/api/profile/:id", checkJwt, checkSelfProfile, (req,res)=> {
@@ -104,7 +115,7 @@ app.post("/api/test", checkJwt, checkWriteProjects,(req, res)=> {
     console.log(req.body);
     db.SubcontractorProfile.create(req.body).then(dbSubProfile => {
         res.json(dbSubProfile);
-    })
+    });
 });
 
 //if no other route is matched

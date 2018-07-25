@@ -3,7 +3,6 @@ import Auth from './Auth/Auth';
 import axios from "axios";
 
 
-
 const lauth = new Auth();
 
 
@@ -13,7 +12,6 @@ class UserProvider extends React.Component {
     state = { 
         auth: lauth, 
         handleAuthentication: lauth.handleAuthentication,
-
         profile:{}
    
     }
@@ -34,19 +32,23 @@ class UserProvider extends React.Component {
             if (!userProfile) {
                 let accessToken = lauth.getAccessToken();
                 getProfile((err, profile) => {
-                    // this.setState({ profile: profile.name});
-                    // console.log("_____________________");
-                    // console.log("SETTING THE USER NAME IN PROFILE OF STATE")
-                    // console.log(this.state.profile)
-                    // console.log("_____________________");
-
-                    const url = "/api/profile/" + profile.sub;
+                   
+                    let url;
+                    //if the user is an admin, use the appropriate axios route
+                    if(profile.sub ==="auth0|5b4e55872fb56226994a34b4"){
+                        console.log("I know you're an admin");
+                        url="/api/adminprofile/" + profile.sub;
+                    }else{
+                        console.log("I know you're a subcontractor");
+                       url = "/api/profile/" + profile.sub;
+                    }
+                    
                     const headers = { 'Authorization': `Bearer ${accessToken}` }
                     axios.get(url, {headers}).then(res =>{
 
                         this.setState({profile: res.data});
                         console.log("inside usercontext __________");
-                        console.log(this.state.profile.profileStage);
+                        console.log(this.state.profile.contactName.firstName);
                         console.log("inside usercontext __________");
                         
 
@@ -80,8 +82,6 @@ class UserProvider extends React.Component {
         const isSubContractor = lauth.userHasScopes(["read:projects"]);
         
         //const origin = window.location.origin;
-
-
 
         if(isAdmin){
             console.log("redirecting **************")
