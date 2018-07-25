@@ -21,22 +21,26 @@ import Project from '../pages/Project';
 class Header extends Component {
 
     render() {
-        const isAdmin = this.props.state.auth.userHasScopes(["write:projects"]);
-        const fullUserSubcontractor = this.props.state.auth.userHasScopes(["read:projects"]);
-        const needsProfile = this.props.state.auth.userHasScopes(["profile"]) && !this.props.state.auth.userHasScopes(["read:projects"]);
-        const unapprovedUser = this.props.state.auth.userHasScopes(["openid"]) && !this.props.state.auth.userHasScopes(["profile"]) 
+        //const authenticUser= this.props.state.auth.isAuthenticated();
+        //const scopes = this.props.state.auth.userHasScopes()
+        const isAdmin =  this.props.state.auth.userHasScopes(["write:projects"]);
+        const fullUserSubcontractor =this.props.state.auth.userHasScopes(["read:projects"]);
+        const needsProfile =  this.props.state.auth.userHasScopes(["profile"]);
+        const unapprovedUser =  this.props.state.auth.userHasScopes(["openid"]) && !this.props.state.auth.userHasScopes(["profile"]);
         return (
             
                     <Router history={history}>
                         <div>
                             <Nav auth={this.props.state.auth} userName={this.props.state.profile} handleStepToDash={this.props.handleStepToDash}/>
 
-                            <Route exact path="/" render={(props) => <Landing auth={props.auth} {...props} />} />
+                            <Route exact path="/" render={(props) => <Landing user={this.props.state} {...props} />} />
                             
+                     
+                            <div>
                             <Route exact path="/awaitapproval" render={(props) => {
                                 return(
                                         unapprovedUser ? (
-                                            <NeedAdminApproval auth={props.auth} {...props} />
+                                            <NeedAdminApproval auth={this.props.auth} {...props} />
                                         ) : (
                                             <Redirect to="/"/>
                                         )
@@ -48,9 +52,9 @@ class Header extends Component {
                             <Route exact path="/buildprofile" render={(props) => {
                                 return(
                                         needsProfile ? (
-                                            <Profileform auth={props.auth} {...props} />
+                                            <Profileform user={this.props.state}  {...props} />
                                         ) : (
-                                            <Redirect to="/subdashboard"/>
+                                            <Redirect to="/"/>
                                         )
                                     )
 
@@ -60,7 +64,7 @@ class Header extends Component {
                             <Route exact path="/editprofile" render={(props) => {
                                 return(
                                     fullUserSubcontractor ? (
-                                            <Profileform auth={props.auth} {...props} />
+                                            <Profileform auth={this.props.auth} {...props} />
                                         ) : (
                                             <Redirect to="/subdashboard"/>
                                         )
@@ -73,7 +77,7 @@ class Header extends Component {
                             <Route exact path="/subdashboard" render={(props) => {
                                 return(
                                     fullUserSubcontractor ? (
-                                            <SubDashboard auth={props.auth} {...props} />
+                                            <SubDashboard auth={this.props.auth} {...props} />
                                         ) : (
                                             <Redirect to="/"/>
                                         )
@@ -86,7 +90,7 @@ class Header extends Component {
                             <Route exact path="/dashboard" render={(props) => {
                                 return(
                                         isAdmin ? (
-                                            <AdminDashboard auth={props.auth} {...props} />
+                                            <AdminDashboard auth={this.props.auth} {...props} />
                                         ) : (
                                             <Redirect to="/subdashboard"/>
                                         )
@@ -98,7 +102,7 @@ class Header extends Component {
                                   <Route exact path="/newproject" render={(props) => {
                                 return(
                                         isAdmin ? (
-                                            <EditProject auth={props.auth} {...props} />
+                                            <EditProject auth={this.props.auth} {...props} />
                                         ) : (
                                             <Redirect to="/subdashboard"/>
                                         )
@@ -110,7 +114,7 @@ class Header extends Component {
                              <Route path="/project/:id" render={(props) => {
                                 return(
                                     fullUserSubcontractor ? (
-                                            <Project auth={props.auth} {...props} />
+                                            <Project auth={this.props.auth} {...props} />
                                         ) : (
                                             <Redirect to="/"/>
                                         )
@@ -122,7 +126,7 @@ class Header extends Component {
                             <Route path="/editproject/:id" render={(props) => {
                                 return(
                                         isAdmin ? (
-                                            <EditProject auth={props.auth} {...props} />
+                                            <EditProject auth={this.props.auth} {...props} />
                                         ) : (
                                             <Redirect to="/subdashboard"/>
                                         )
@@ -130,7 +134,9 @@ class Header extends Component {
 
                                 }
                             } />
+                     </div>
 
+                    
 
 
                             <Route path="/callback" render={(props) => {

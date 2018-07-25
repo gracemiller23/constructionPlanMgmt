@@ -85,19 +85,24 @@ app.post("/api/firstprofile", checkJwt, checkFirstUser, (req, res)=>{
 } )
 
 //routes for profile elements stored in MongoDB
-app.get("/api/profile", checkJwt, checkSelfProfile, (req,res)=> {
-    console.log(`inside route and I am working`);
-        res.json("I worked!");
+app.get("/api/profile/:id", checkJwt, checkSelfProfile, (req,res)=> {
+    let userAuth0Id = req.params.id;
+    db.SubcontractorProfile.findOne({auth0Id: userAuth0Id}).then(results => {
+        res.json(results)
+    });
 });
 
-app.post("/api/profile", checkJwt, checkSelfProfile, (req,res)=> {
-    console.log(`inside route and I am working`);
-        res.json("I worked!");
+app.post("/api/profile/:id", checkJwt, checkSelfProfile, (req,res)=> {
+    let userAuth0Id = req.params.id;
+    let update = req.body;
+    db.SubcontractorProfile.findOneAndUpdate({auth0Id: userAuth0Id}, update).then(results => {
+        res.json(results)
+    });
 });
  
 app.post("/api/test", checkJwt, checkWriteProjects,(req, res)=> {
     console.log(req.body);
-    SubcontractorProfile.create(req.body).then(dbSubProfile => {
+    db.SubcontractorProfile.create(req.body).then(dbSubProfile => {
         res.json(dbSubProfile);
     })
 });

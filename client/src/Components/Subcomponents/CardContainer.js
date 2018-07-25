@@ -12,10 +12,10 @@ const CardContainer = (props) => {
     return (
         <div className={cardConClassNames}>
         
-            <div class={cardHeadClassNames} >
+            <div className={cardHeadClassNames} >
               <h1>{props.cardHeadTxt}</h1>
             </div>
-            <div class={cardBodClassNames}>
+            <div className={cardBodClassNames}>
                     {props.children}
             </div>
     </div>

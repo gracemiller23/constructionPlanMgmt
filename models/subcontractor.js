@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-
 const SubcontractorProfileSchema = new Schema({
     auth0Id: {type: String, required:true},
     profileStage: String,
@@ -18,6 +17,7 @@ const SubcontractorProfileSchema = new Schema({
     contactPhone:Number,
     contactEmail:String,
     tradeCategory:String,
+    acknowledgeTerms: String,
     bidInviteProj: [{ type : Schema.Types.ObjectId, ref: 'project' }],
     declinedBidInvite:[{ type : Schema.Types.ObjectId, ref: 'project' }],
     acceptedBidInvite:[{ type : Schema.Types.ObjectId, ref: 'project' }],

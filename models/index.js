@@ -2,5 +2,7 @@
 
 module.exports = {
     SubcontractorProfile: require("./subcontractor"),
-    Project: require("./project")
+    Project: require("./project"),
+    AdminProfile: require("./admin")
+    
   };

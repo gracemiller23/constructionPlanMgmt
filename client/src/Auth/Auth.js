@@ -36,12 +36,11 @@ export default class Auth {
        this.loggedIn = true;
         const grantedScopes = authResult.idTokenPayload["https://example.com/role_scopes"];
 
-          //need to add admin redirect
+          //figure out way to redirect to buildprofile - use "go to" button?
           //evaluate permissions based on hierarchy of scopes granted through Auth0 Rules
-        if(grantedScopes.includes("read:projects")){
-            return history.replace('/');
-        }else if(grantedScopes.includes("profile")){
-              return history.replace('/buildprofile');
+        if(grantedScopes.includes("profile")){
+          console.log("I think this user should go to / from handleAuth");
+            history.replace('/');
         }else if(grantedScopes.includes("openid")){
               //add user to the mongo database
                   const accessToken = authResult.accessToken || '';
@@ -65,8 +64,9 @@ export default class Auth {
         
       } else if (err) {
         this.loggedIn = false;
+          console.log(err);
         history.replace('/');
-        console.log(err);
+      
       }
     });
   }
@@ -81,7 +81,7 @@ export default class Auth {
     const scopes = authResult.scope || this.requestedScopes || "";
     localStorage.setItem("scopes", JSON.stringify(scopes));
     // navigate to the home route
-    history.replace('/');
+    history.replace('/')
   }
 
   login() {
@@ -95,6 +95,7 @@ export default class Auth {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('scopes');
     // navigate to the home route
     history.replace('/');
   }
@@ -117,6 +118,7 @@ export default class Auth {
   userHasScopes(scopes) {
 
     let _scopes = JSON.parse(localStorage.getItem("scopes")) || " ";
+    console.log("inside userhasscopes");
    console.log(_scopes);
    const grantedScopes = _scopes.split(' ');
    return scopes.every(scope => grantedScopes.includes(scope));

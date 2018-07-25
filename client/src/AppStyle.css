@@ -17,6 +17,14 @@ form {
     margin: 1% auto;
 }
 
+.valid {
+    border: 1px solid green;
+}
+
+.invalid {
+    border: 1px solid red;
+}
+
 /* home page */
 .home{
  background-image: url("./blueprints2.jpeg");

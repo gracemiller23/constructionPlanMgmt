@@ -1,5 +1,7 @@
 import React from 'react';
 import Auth from './Auth/Auth';
+import axios from "axios";
+
 
 
 const lauth = new Auth();
@@ -12,7 +14,7 @@ class UserProvider extends React.Component {
         auth: lauth, 
         handleAuthentication: lauth.handleAuthentication,
 
-        profile:""
+        profile:{}
    
     }
 //soon to be depracated lifecycle event - don't use
@@ -23,21 +25,37 @@ class UserProvider extends React.Component {
     }
 
     componentDidMount (){
-        console.log("the component mounted")
-        console.log(lauth);
+       
             if(lauth.isAuthenticated()){
             const { userProfile, getProfile } = lauth;
+            console.log("the component mounted")
+            console.log(userProfile);
+
             if (!userProfile) {
-              getProfile((err, profile) => {
-                this.setState({ profile: profile.name});
-                console.log("_____________________");
-                console.log("SETTING THE USER NAME IN PROFILE OF STATE")
-                console.log(this.state.profile)
-                console.log("_____________________");
+                let accessToken = lauth.getAccessToken();
+                getProfile((err, profile) => {
+                    // this.setState({ profile: profile.name});
+                    // console.log("_____________________");
+                    // console.log("SETTING THE USER NAME IN PROFILE OF STATE")
+                    // console.log(this.state.profile)
+                    // console.log("_____________________");
+
+                    const url = "/api/profile/" + profile.sub;
+                    const headers = { 'Authorization': `Bearer ${accessToken}` }
+                    axios.get(url, {headers}).then(res =>{
+
+                        this.setState({profile: res.data});
+                        console.log("inside usercontext __________");
+                        console.log(this.state.profile.profileStage);
+                        console.log("inside usercontext __________");
+                        
+
+                    
+                  });
 
                 });
             } else {
-                this.setState({ profile: userProfile.name});
+                this.setState({ profile: {}});
             }
         }else{
             console.log("login first")
@@ -71,7 +89,7 @@ class UserProvider extends React.Component {
         }else if(isSubContractor){
             window.location.href="/subdashboard";
         }else{
-            window.location.href="/";
+            window.location.href="/buildprofile";
         }
     }
 
