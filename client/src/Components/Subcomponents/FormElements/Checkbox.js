@@ -10,15 +10,16 @@ const Checkbox = (props) => (
         let displayName = opt.companyName + " - " + opt.tradeCategory;
         console.log("in opt map after " + displayName + "\n--" +opt)
         return (
-          <label key={opt._id} className="form-label capitalize">
+          <div className="" key={opt._id}>
             <input
-              className="form-checkbox form-control"
+              className="form-checkbox form-control form-check-input"
               name={"invitedSubcontractors"}
               onChange={props.controlFunc}
               value={opt._id}
               checked={ props.selectedOptions.indexOf(opt._id) > -1 }
-              type={props.type} /> {displayName}
+              type={props.type} /> <label  className="form-label capitalize form-check-label">{displayName}
           </label>
+          </div>
         );
       })}
     </div>

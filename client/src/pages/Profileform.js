@@ -17,7 +17,7 @@ render(){
         <div className="container-fluid">
             <Dashboard>
             <div className="row">
-                <div className="col">
+                <div className="col centertxt">
                 <h3>Important Note:</h3>
                 <p>The information your provide in your profile is used to email important bid invitations and project updates.</p>
                 </div>

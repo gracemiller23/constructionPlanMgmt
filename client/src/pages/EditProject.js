@@ -18,7 +18,7 @@ render(){
         <div className="container-fluid">
             <Dashboard>
             <div className="row">
-                <div className="col">
+                <div className="col centertxt">
                 <h3>Project Details</h3>
                 </div>
                 </div>

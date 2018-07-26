@@ -3,9 +3,9 @@ import axios from "axios";
 import { withRouter } from "react-router-dom";
 
 //import Checkbox from "../Components/Subcomponents/FormElements/Checkbox";
-import SelectInput from "../Components/Subcomponents/FormElements/SelectInput";
+
 import SingleInput from "../Components/Subcomponents/FormElements/SingleInput";
-import Button from "../Components/Subcomponents/Button";
+
 import Checkbox from "../Components/Subcomponents/FormElements/Checkbox";
 
 //figure out passing auth0id in
@@ -40,7 +40,9 @@ class SubProfileform extends React.Component {
     componentWillMount() {
 
         const accessToken = this.props.user.auth.getAccessToken() || '';
-        if (accessToken === '') { return } else {
+        if (accessToken === '') { 
+            console.log("missing access token") 
+    } else {
             const headers = { 'Authorization': `Bearer ${accessToken}` }
             axios.get("/api/subcontractors", { headers }).then(res => {
                 console.log(res);
@@ -57,7 +59,8 @@ class SubProfileform extends React.Component {
 
     //add methods for form validation later
 
-    postForm = event => {
+    postForm = (event) => {
+        console.log(event.target);
         event.preventDefault();
         const formState = this.state;
         const data = {
@@ -66,16 +69,31 @@ class SubProfileform extends React.Component {
             invitedSubcontractors: formState.invitedSubcontractors
         }
         const accessToken = this.props.user.auth.getAccessToken() || '';
-        if (!accessToken === '') {
+        if (accessToken === '') {
+            this.props.history.push("/dashboard")
+        } else {
             const headers = { 'Authorization': `Bearer ${accessToken}` }
+            //create the project in mongoDB
             axios.post("/api/project", data, { headers }).then(res => {
-                console.log(res);
-                this.setState({
-                    projectName: "",
-                    projectLocation: "",
-                    invitedSubcontractors: []
-                });
-                // this.props.history.push("/subdashboard");
+                    console.log(res);
+                    let data2 = {
+                        projectId: res.data._id,
+                        subcontractors: this.state.invitedSubcontractors
+                    }
+                    
+                    //add the project objId to subcontractors' profiles
+                    axios.post("/api/subinvites", data2, {headers}).then(res=>{
+                        console.log("inside project form, the updateMany succeeded and sent the following result:")
+                        console.log(res);
+
+                        this.setState({
+                            projectName: "",
+                            projectLocation: "",
+                            invitedSubcontractors: []
+                        });
+              this.props.history.push("/dashboard");
+
+                    });
             });
         }
     }
@@ -86,13 +104,17 @@ class SubProfileform extends React.Component {
             <form>
                 <SingleInput inputType="text" title="Project Name" name="projectName" controlFunc={this.handleInputChange} content={this.state.projectName} placeholder="Project Name" />
                 <SingleInput inputType="text" title="Project Location" name="projectLocation" controlFunc={this.handleInputChange} content={this.state.projectLocation} placeholder="123 Ripple St., Austin, TX 78733" />
-                <Checkbox
-                    title={'Select Subcontractors to Invite to Bidding'}
-                    setName={'invitedSubcontractors'}
-                    type={'checkbox'}
-                    controlFunc={this.handleSelectSubcontractors}
-                    options={this.state.subcontractors}
-                    selectedOptions={this.state.invitedSubcontractors} />
+                <div className="scroll-box">
+                    <Checkbox
+                        title={'Select Subcontractors to Invite to Bidding'}
+                        setName={'invitedSubcontractors'}
+                        type={'checkbox'}
+                        controlFunc={this.handleSelectSubcontractors}
+                        options={this.state.subcontractors}
+                        selectedOptions={this.state.invitedSubcontractors} />
+                </div>
+
+                <button onClick={this.postForm} className="blue">Submit</button>
             </form>
 
         )

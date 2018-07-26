@@ -13,23 +13,21 @@ class UserProvider extends React.Component {
         auth: lauth, 
         handleAuthentication: lauth.handleAuthentication,
         profile:{},
-        name:{}
+        name:{},
+        mongoId:"",
+        auth0Id:"",
    
     }
 //soon to be depracated lifecycle event - don't use
-    componentWillMount(){
-        console.log("in willMount");
-    
-        
-    }
 
-    componentDidMount (){
+
+    componentWillMount (){
        
             if(lauth.isAuthenticated()){
             const { userProfile, getProfile } = lauth;
-            console.log("the component mounted")
+            console.log("the context mounted")
             console.log(userProfile);
-
+            if(this.state.mongoId === ""){
             if (!userProfile) {
                 let accessToken = lauth.getAccessToken();
                 getProfile((err, profile) => {
@@ -46,12 +44,11 @@ class UserProvider extends React.Component {
                     
                     const headers = { 'Authorization': `Bearer ${accessToken}` }
                     axios.get(url, {headers}).then(res =>{
-
-                        this.setState({profile: res.data, name: res.data.contactName});
-                        console.log("inside usercontext __________");
-                        console.log(this.state);
-                        console.log("inside usercontext __________");
                         
+                        this.setState({profile: res.data, name: res.data.contactName, mongoId: res.data._id,
+                        auth0Id: res.data.auth0Id});
+                       
+                 
 
                     
                   });
@@ -60,6 +57,7 @@ class UserProvider extends React.Component {
             } else {
                 this.setState({ profile: {}});
             }
+        }
         }else{
             console.log("login first")
         }

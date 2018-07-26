@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Router, Route, Redirect } from "react-router-dom";
 
+
 import history from '../history';
 
 
@@ -77,7 +78,7 @@ class Header extends Component {
                             <Route exact path="/subdashboard" render={(props) => {
                                 return(
                                     fullUserSubcontractor ? (
-                                            <SubDashboard auth={this.props.auth} {...props} />
+                                            <SubDashboard auth={this.props.state.auth} user={this.props.state.profile} {...props} />
                                         ) : (
                                             <Redirect to="/"/>
                                         )
@@ -86,11 +87,11 @@ class Header extends Component {
                                 }
                             } />
 
-                            
+                    
                             <Route exact path="/dashboard" render={(props) => {
                                 return(
                                         isAdmin ? (
-                                            <AdminDashboard auth={this.props.auth} {...props} />
+                                            <AdminDashboard auth={this.props.state.auth} {...props} />
                                         ) : (
                                             <Redirect to="/subdashboard"/>
                                         )

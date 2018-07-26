@@ -118,8 +118,7 @@ export default class Auth {
   userHasScopes(scopes) {
 
     let _scopes = JSON.parse(localStorage.getItem("scopes")) || " ";
-    console.log("inside userhasscopes");
-   console.log(_scopes);
+
    const grantedScopes = _scopes.split(' ');
    return scopes.every(scope => grantedScopes.includes(scope));
 

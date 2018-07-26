@@ -110,6 +110,16 @@ form {
     font-weight:bold;
 }
 
+.scroll-box{
+    height:200px;
+    width:80%;
+    margin: 1% auto;
+    border:1px solid black;
+    background-color: white;
+    overflow:auto;
+    padding: 4%;
+}
+
 
 /* ---------- Project Styles ----------*/
 .proj-progress{

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+
 //import SubconProfile from "../Components/SubconProfile";
 import { UserConsumer } from '../UserContext';
 
@@ -10,50 +9,18 @@ import TopTabTabCont from '../Components/Subcomponents/TopTabElements/TopTabTabC
 import TopTabBodyCont from '../Components/Subcomponents/TopTabElements/TopTabBodyCont';
 import TopTabTab from '../Components/Subcomponents/TopTabElements/TopTabTab';
 import TopTabBody from '../Components/Subcomponents/TopTabElements/TopTabBody';
+import ProjectList from "../Components/Subcomponents/ProjectList";
 
 
 class SubDashboard extends Component {
-    state = {
-        projects: [],
-        profile: {}
-    }
+    
 
-    componentWillMount() {
-        // this.setState({ profile: {} });
-        // const { userProfile, getProfile } = this.props.auth;
-        // const accessToken = localStorage.getItem('access_token') || '';
-        // if (accessToken === '') {
-        //     this.setState({profile: {sub: "please log in to see your profile"}});
-        // }else{
-        //     if (!userProfile) {
-        //         getProfile((err, profile) => {
-        //             this.setState({ profile });
-        //             console.log(this.state.profile);
-        //         });
-        //     } else {
-        //         this.setState({ profile: userProfile });
-        //         console.log(this.state.profile);
-        //     }
-        // }
-    }
+    
     //for post, headers go after data sent to post
     refreshProjects() {
-        // const { getAccessToken } = this.props.auth;
-        // const accessToken = localStorage.getItem('access_token') || '';
-        // if (accessToken === ''){
-        //     this.setState({ projects: [{_id:1, title: "Please log in to view projects"}]});
-        // } else{
-        // const headers = { 'Authorization': `Bearer ${getAccessToken()}` };
-        // axios.get("/api/profile", { headers }).then((res) => {
-        //     console.log(res);
-        //     this.setState({ profile: res.data });
-        // });
-        //}
+       
     }
 
-    componentDidMount() {
-        // this.refreshProjects();
-    }
     // was inside the render
     //{
     //     this.state.projects.map(project => (
@@ -78,11 +45,11 @@ class SubDashboard extends Component {
                 {prov => (
                     <div className="container-fluid">
                         <Dashboard>
-                            <div class="row">
+                            <div className="row">
 
                             </div>
-                            <div class="row">
-                                <div class="col">
+                            <div className="row">
+                                <div className="col">
                                     <TopTabTabCont tabContId="subprofile-tab-top">
 
                                         <TopTabTab title="New Invitations" linkId="new-invitations" linkClasses="active" linkToId="new-invitations-content" selected="true" />
@@ -93,7 +60,7 @@ class SubDashboard extends Component {
                                     </TopTabTabCont>
                                     <TopTabBodyCont tabBodyId="subprofile-tab-body">
                                         <TopTabBody tabBodyClasses="show active" tabBodyId="new-invitations-content" tabTopId="new-invitations">
-                                        <div><p>Here's something</p></div>
+                                            <ProjectList user={prov.state}/>
                                         </TopTabBody>
                                         <TopTabBody tabBodyId="accepted-invitations-content" tabTopId="accepted-invitations">
                                         <div><p>Here's something</p></div>

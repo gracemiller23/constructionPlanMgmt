@@ -98,6 +98,20 @@ app.get("/api/subcontractors", checkJwt, checkWriteProjects, (req,res)=> {
     );
 });
 
+app.post("/api/subinvites", checkJwt, checkWriteProjects, (req, res)=>{
+    let criteria = {
+        _id: {$in: req.body.subcontractors}
+    };
+
+    let dataUpdate= {
+        $push: {bidInviteProj: req.body.projectId}
+    }
+    db.SubcontractorProfile.updateMany(criteria, dataUpdate).then(results => {
+        res.json(results);
+    })
+
+})
+
 //routes for subcontractor profile elements stored in MongoDB
 app.get("/api/profile/:id", checkJwt, checkSelfProfile, (req,res)=> {
     let userAuth0Id = req.params.id;
@@ -115,6 +129,23 @@ app.post("/api/profile/:id", checkJwt, checkSelfProfile, (req,res)=> {
 });
 
 //api routes for creating, updating, deleting projects
+app.get("/api/projectsdash/:id", checkJwt, checkReadProjects, (req,res)=> {
+    console.log("in the api")
+    console.log(req.params.id);
+    let subcontractor = req.params.id;
+    db.SubcontractorProfile.findOne({_id: subcontractor}).populate("bidInviteProj").exec(function (err, results) {
+        if (err) return console.log(err);
+        res.json(results);
+      });
+});
+
+app.get("/api/adminproj", checkJwt, checkReadProjects, (req,res)=> {
+    console.log("in the api")
+    console.log(req.params.id);
+    let subcontractor = req.params.id;
+    db.Project.find({}).sort({createdAt: -1}).then(results => res.json(results))
+});
+
 app.post("/api/project", checkJwt, checkWriteProjects,(req, res)=> {
     console.log(req.body);
     db.Project.create(req.body).then(dbProject => {
