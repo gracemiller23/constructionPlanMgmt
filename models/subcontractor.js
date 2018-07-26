@@ -18,11 +18,11 @@ const SubcontractorProfileSchema = new Schema({
     contactEmail:String,
     tradeCategory:String,
     acknowledgeTerms: String,
-    bidInviteProj: [{ type : Schema.Types.ObjectId, ref: 'project' }],
-    declinedBidInvite:[{ type : Schema.Types.ObjectId, ref: 'project' }],
-    acceptedBidInvite:[{ type : Schema.Types.ObjectId, ref: 'project' }],
-    awardedProjects:[{ type : Schema.Types.ObjectId, ref: 'project' }],
-    archivedProjects:[{ type : Schema.Types.ObjectId, ref: 'project' }]
+    bidInviteProj: [{ type : Schema.Types.ObjectId, ref: 'Project' }],
+    declinedBidInvite:[{ type : Schema.Types.ObjectId, ref: 'Project' }],
+    acceptedBidInvite:[{ type : Schema.Types.ObjectId, ref: 'Project' }],
+    awardedProjects:[{ type : Schema.Types.ObjectId, ref: 'Project' }],
+    archivedProjects:[{ type : Schema.Types.ObjectId, ref: 'Project' }]
 },{
     timestamps:true
 });

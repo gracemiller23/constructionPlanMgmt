@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 //import SubconProfile from "../Components/SubconProfile";
 import { UserConsumer } from '../UserContext';
 
-import Name from "../Components/Name";
+import SubconProfile from '../Components/SubconProfile';
+import Dashboard from '../Components/Dashboard';
+import TopTabTabCont from '../Components/Subcomponents/TopTabElements/TopTabTabCont';
+import TopTabBodyCont from '../Components/Subcomponents/TopTabElements/TopTabBodyCont';
+import TopTabTab from '../Components/Subcomponents/TopTabElements/TopTabTab';
+import TopTabBody from '../Components/Subcomponents/TopTabElements/TopTabBody';
 
 
 class SubDashboard extends Component {
@@ -43,11 +48,11 @@ class SubDashboard extends Component {
         //     console.log(res);
         //     this.setState({ profile: res.data });
         // });
-    //}
+        //}
     }
 
     componentDidMount() {
-       // this.refreshProjects();
+        // this.refreshProjects();
     }
     // was inside the render
     //{
@@ -67,48 +72,49 @@ class SubDashboard extends Component {
 
     render() {
         return (
-           
 
-                <UserConsumer>
+
+            <UserConsumer>
                 {prov => (
-                      <div className="container-fluid">
-                              <Dashboard>
-        <div class="row">
+                    <div className="container-fluid">
+                        <Dashboard>
+                            <div class="row">
 
-        </div>
-        <div class="row">
-            <div class="col">
-                <TopTabTabCont tabContId="">
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <TopTabTabCont tabContId="subprofile-tab-top">
 
-                    <TopTabTab title="" linkId="" linkClasses="active" linkToId="" selected=""/>
-                    <TopTabTab title="" linkId="" linkClasses="" linkToId="" selected=""/>
-                    <TopTabTab title="" linkId="" linkClasses="" linkToId="" selected=""/>
-                    <TopTabTab title="" linkId="" tabClasses="ml-auto" linkClasses="" linkToId="" selected=""/>
+                                        <TopTabTab title="New Invitations" linkId="new-invitations" linkClasses="active" linkToId="new-invitations-content" selected="true" />
+                                        <TopTabTab title="Accepted Invitations" linkId="accepted-invitations" linkToId="accepted-invitations-content" selected="false" />
+                                        <TopTabTab title="Awarded Projects" linkId="awarded-projects" linkToId="awarded-projects-content" selected="false" />
+                                        <TopTabTab title="My Profile" linkId="my-profile" linkClasses="ml-auto" linkToId="my-profile-content" selected="false" />
 
-                  </TopTabTabCont>
-                <TopTabBodyCont tabBodyId="">
-                      <TopTabBody tabBodyClasses="show active" tabBodyId="" tabTopId="">
-                        
-                        </TopTabBody>
-                        <TopTabBody tabBodyId="" tabTopId="">
-                        
-                        </TopTabBody>
-                        <TopTabBody tabBodyId="" tabTopId="">
-                        
-                        </TopTabBody>
-                        <TopTabBody tabBodyId="" tabTopId="">
-                        
-                        </TopTabBody>
-                  </TopTabBodyCont>
-            </div>
-        </div>
+                                    </TopTabTabCont>
+                                    <TopTabBodyCont tabBodyId="subprofile-tab-body">
+                                        <TopTabBody tabBodyClasses="show active" tabBodyId="new-invitations-content" tabTopId="new-invitations">
+                                        <div><p>Here's something</p></div>
+                                        </TopTabBody>
+                                        <TopTabBody tabBodyId="accepted-invitations-content" tabTopId="accepted-invitations">
+                                        <div><p>Here's something</p></div>
+                                        </TopTabBody>
+                                        <TopTabBody tabBodyId="awarded-projects-content" tabTopId="awarded-projects">
+                                        <div><p>Here's something</p></div>
+                                        </TopTabBody>
+                                        <TopTabBody tabBodyId="my-profile-content" tabTopId="my-profile">
+                                            <SubconProfile profile={prov.state.profile} firstName={prov.name.firstName} lastName={prov.name.lastName} formatPhone={prov.formatPhoneNumber} editProfilePath={""} />
+                                        </TopTabBody>
 
-        </Dashboard>      
-                  </div>
+                                    </TopTabBodyCont>
+                                </div>
+                            </div>
 
-            )}
+                        </Dashboard>
+                    </div>
+
+                )}
             </UserConsumer>
-          
+
         )
     }
 }

@@ -12,7 +12,8 @@ class UserProvider extends React.Component {
     state = { 
         auth: lauth, 
         handleAuthentication: lauth.handleAuthentication,
-        profile:{}
+        profile:{},
+        name:{}
    
     }
 //soon to be depracated lifecycle event - don't use
@@ -46,9 +47,9 @@ class UserProvider extends React.Component {
                     const headers = { 'Authorization': `Bearer ${accessToken}` }
                     axios.get(url, {headers}).then(res =>{
 
-                        this.setState({profile: res.data});
+                        this.setState({profile: res.data, name: res.data.contactName});
                         console.log("inside usercontext __________");
-                        console.log(this.state.profile.contactName.firstName);
+                        console.log(this.state);
                         console.log("inside usercontext __________");
                         
 
@@ -64,6 +65,11 @@ class UserProvider extends React.Component {
         }
 
     }
+   formatPhoneNumber(s) {
+        var s2 = (""+s).replace(/\D/g, '');
+        var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
+        return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
+      }
 
     handleLogin =()=>{
         lauth.login();
@@ -99,7 +105,7 @@ class UserProvider extends React.Component {
 
       return (
         <UserContext.Provider
-          value={{state:this.state, handleLogin: this.handleLogin, handleLogout: this.handleLogout, handleStepToDash: this.handleStepToDash}}
+          value={{state:this.state, name: this.state.name, handleLogin: this.handleLogin, handleLogout: this.handleLogout, handleStepToDash: this.handleStepToDash, formatPhoneNumber: this.formatPhoneNumber}}
         >
           {this.props.children}
         </UserContext.Provider>

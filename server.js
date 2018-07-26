@@ -70,12 +70,6 @@ const checkReadSubInviteReply = jwtAuthz(['read:subinvitereply']);
 
 //---------------------------------routes-------------------------------------//
 
-app.get("/api/test", checkJwt, checkReadProjects, (req,res)=> {
-    db.SubcontractorProfile.find({}).sort({createdAt: -1}).then(results => {
-        res.json(results)
-        }
-    );
-});
 
 //route for creating a profile entry with an auth0 id after the user's very first login, which is immediately logged out
 
@@ -95,7 +89,16 @@ app.get("/api/adminprofile/:id", checkJwt, checkWriteProjects, (req,res)=> {
     });
 });
 
-//routes for profile elements stored in MongoDB
+//route for admin accessing all subs
+
+app.get("/api/subcontractors", checkJwt, checkWriteProjects, (req,res)=> {
+    db.SubcontractorProfile.find({}).then(results => {
+        res.json(results)
+        }
+    );
+});
+
+//routes for subcontractor profile elements stored in MongoDB
 app.get("/api/profile/:id", checkJwt, checkSelfProfile, (req,res)=> {
     let userAuth0Id = req.params.id;
     db.SubcontractorProfile.findOne({auth0Id: userAuth0Id}).then(results => {
@@ -110,13 +113,16 @@ app.post("/api/profile/:id", checkJwt, checkSelfProfile, (req,res)=> {
         res.json(results)
     });
 });
- 
-app.post("/api/test", checkJwt, checkWriteProjects,(req, res)=> {
+
+//api routes for creating, updating, deleting projects
+app.post("/api/project", checkJwt, checkWriteProjects,(req, res)=> {
     console.log(req.body);
-    db.SubcontractorProfile.create(req.body).then(dbSubProfile => {
-        res.json(dbSubProfile);
+    db.Project.create(req.body).then(dbProject => {
+        res.json(dbProject);
     });
 });
+
+
 
 //if no other route is matched
 app.use(function(req,res){

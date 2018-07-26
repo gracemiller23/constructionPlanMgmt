@@ -16,14 +16,14 @@ const TopTabTab = (props) => {
     if(props.linkClasses){
         linkClasses = "nav-link " + props.linkClasses;
     }
-    let tabClasses = "nav-item ";
+    let tabClassess = "nav-item ";
     if(props.tabClasses){
-        tabClasses = "nav-item " + props.tabClasses;
+        tabClassess = "nav-item " + props.tabClasses;
     }
     let linkTo = "#"+props.linkToId;
 
     return (
-        <li className="nav-item">
+        <li className={tabClassess}>
             <a className={linkClasses} id={props.linkId} data-toggle="tab" href={linkTo} aria-controls={props.linkToId} role="tab">
                 {props.title}
                 </a>
